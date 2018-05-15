@@ -6,6 +6,8 @@ using namespace std;
 
 list <int> requests; //2055, 1175, 2304, 2700, 513, 1680, 256, 1401, 4922, 3692
 int start_position = 2255;
+int track_start = 0;
+int track_end = 4999;
 
 void initialize_list(){
     requests.push_back(2055);
@@ -31,6 +33,7 @@ void FCFS()
 
     while(!requests.empty()) {
         curr = requests.front();
+        cout << "next: "<< curr << endl;
         requests.pop_front();
         total_dist += abs(prev - curr);
         prev = curr;
@@ -66,16 +69,64 @@ void SSTF()
     while (!requests.empty()) {
         min_dist_element = element_shortest_distance(curr);
         curr = min_dist_element;
+        cout << "next: "<< curr << endl;
         requests.remove(curr);
         total_dist += abs(prev - curr);
         prev = curr;
     }
-    cout << "total distance for FCFS: " << total_dist << endl;
+    cout << "total distance for SSTF: " << total_dist << endl;
 }
 
+//find next larger or equal element of e for SCAN
+int find_next_large(int e)
+{
+    for (list<int>::iterator it = requests.begin(); it != requests.end(); ++it) {
+        if(*it >= e){
+            return *it;
+        }
+    }
+    return -1;
+}
+
+// elevator approach move to the end of the track
 void SCAN()
 {
+    initialize_list();
     
+    int total_dist = 0;
+    int curr = start_position;
+    int prev = start_position;
+    
+    //sort by increasing order
+    requests.sort();
+    
+    while (1) {
+        curr = find_next_large(curr);
+        //no more next large element
+        if(curr == -1){
+            curr = track_end;
+            cout << "next: "<< curr << endl;
+            total_dist += abs(prev - curr);
+            prev = curr;
+            break;
+        }
+        cout << "next: "<< curr << endl;
+        requests.remove(curr);
+        total_dist += abs(prev - curr);
+        prev = curr;
+    }
+    
+    //reverse the order
+    requests.reverse();
+    for(list<int>::iterator it = requests.begin(); it != requests.end(); ++it){
+        curr = *it;
+        cout << "next: "<< curr << endl;
+        requests.pop_front();
+        total_dist += abs(prev - curr);
+        prev = curr;
+    }
+    
+    cout << "total distance for SCAN: " << total_dist << endl;
 }
 
 void CSCAN()
