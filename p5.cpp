@@ -161,6 +161,15 @@ void CSCAN()
         curr = find_next_large(curr);
         //no more next large element... go to the start of the track
         if(curr == -1){
+            curr = track_end;
+            cout << "prev: " << prev << endl;
+            cout << "next: "<< curr << endl;
+            total_dist += abs(prev - curr);
+            cout << abs(prev - curr) <<endl;
+            
+            total_dist += track_end;
+            cout << total_dist <<endl;
+            
             prev = track_start;
             break;
         }
