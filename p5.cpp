@@ -185,14 +185,84 @@ void CSCAN()
     cout << "total distance for CSCAN: " << total_dist << endl;
 }
 
+
 void LOOK()
 {
+    initialize_list();
     
+    int total_dist = 0;
+    int curr = start_position;
+    int prev = start_position;
+    
+    //sort by increasing order
+    requests.sort();
+    
+    while (1) {
+        curr = find_next_large(curr);
+        //no more next large element
+        if(curr == -1){
+            break;
+        }
+        cout << "prev: " << prev << endl;
+        cout << "next: "<< curr << endl;
+        requests.remove(curr);
+        total_dist += abs(prev - curr);
+        cout << abs(prev - curr) <<endl;
+        prev = curr;
+    }
+    
+    //reverse the order
+    requests.reverse();
+    for(list<int>::iterator it = requests.begin(); it != requests.end(); ++it){
+        curr = *it;
+        cout << "prev: " << prev << endl;
+        cout << "next: "<< curr << endl;
+        requests.pop_front();
+        total_dist += abs(prev - curr);
+        cout << abs(prev - curr) <<endl;
+        prev = curr;
+    }
+    
+    cout << "total distance for LOOK: " << total_dist << endl;
 }
 
 void CLOOK()
 {
+    initialize_list();
     
+    int total_dist = 0;
+    int curr = start_position;
+    int prev = start_position;
+    
+    //sort by increasing order
+    requests.sort();
+    
+    while (1) {
+        curr = find_next_large(curr);
+        //no more next large element... go to the start of the track
+        if(curr == -1){
+            //prev = track_start;
+            break;
+        }
+        cout << "prev: " << prev << endl;
+        cout << "next: "<< curr << endl;
+        requests.remove(curr);
+        total_dist += abs(prev - curr);
+        cout << abs(prev - curr) <<endl;
+        prev = curr;
+    }
+    
+    for(list<int>::iterator it = requests.begin(); it != requests.end(); ++it){
+        curr = *it;
+        cout << "prev: " << prev << endl;
+        cout << "next: "<< curr << endl;
+        requests.pop_front();
+        total_dist += abs(prev - curr);
+        cout << abs(prev - curr) <<endl;
+        prev = curr;
+    }
+    
+    cout << "total distance for CLOOK: " << total_dist << endl;
 }
 
 
@@ -210,13 +280,13 @@ int main()
     cout << "********************" << endl;
     SCAN();
     
-    cout << "LOOK" << endl;
-    cout << "********************" << endl;
-    LOOK();
-    
     cout << "CSCAN" << endl;
     cout << "********************" << endl;
     CSCAN();
+    
+    cout << "LOOK" << endl;
+    cout << "********************" << endl;
+    LOOK();
     
     cout << "CLOOK" << endl;
     cout << "********************" << endl;
