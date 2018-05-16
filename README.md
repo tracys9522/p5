@@ -1,10 +1,9 @@
 # p5-
 
 - Tracy
-    - I have implemented FCFS and SSTF
+    - I have implemented FCFS, SSTF, SCAN
     
     - Need to do:
-        - SCAN
         - CSCAN
         - LOOK
         - CLOOK
