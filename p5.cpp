@@ -1,3 +1,8 @@
+/*
+ * Description: Disk Algo: FCFS, SSTF, SCAN, CSCAN, LOOK, CLOOK
+ * Author: Tracy Sun
+ */
+
 #include <iostream>
 #include <cmath>
 #include <list>
@@ -9,6 +14,7 @@ int start_position = 2255;
 int track_start = 0;
 int track_end = 4999;
 
+//insert values into list
 void initialize_list(){
     requests.push_back(2055);
     requests.push_back(1175);
@@ -33,9 +39,11 @@ void FCFS()
 
     while(!requests.empty()) {
         curr = requests.front();
+        cout << "prev: " << prev << endl;
         cout << "next: "<< curr << endl;
         requests.pop_front();
         total_dist += abs(prev - curr);
+        cout << abs(prev - curr) <<endl;
         prev = curr;
     }
     cout << "total distance for FCFS: " << total_dist << endl;
@@ -69,9 +77,11 @@ void SSTF()
     while (!requests.empty()) {
         min_dist_element = element_shortest_distance(curr);
         curr = min_dist_element;
+        cout << "prev: " << prev << endl;
         cout << "next: "<< curr << endl;
         requests.remove(curr);
         total_dist += abs(prev - curr);
+        cout << abs(prev - curr) <<endl;
         prev = curr;
     }
     cout << "total distance for SSTF: " << total_dist << endl;
@@ -105,14 +115,18 @@ void SCAN()
         //no more next large element
         if(curr == -1){
             curr = track_end;
+            cout << "prev: " << prev << endl;
             cout << "next: "<< curr << endl;
             total_dist += abs(prev - curr);
+            cout << abs(prev - curr) <<endl;
             prev = curr;
             break;
         }
+        cout << "prev: " << prev << endl;
         cout << "next: "<< curr << endl;
         requests.remove(curr);
         total_dist += abs(prev - curr);
+        cout << abs(prev - curr) <<endl;
         prev = curr;
     }
     
@@ -120,18 +134,55 @@ void SCAN()
     requests.reverse();
     for(list<int>::iterator it = requests.begin(); it != requests.end(); ++it){
         curr = *it;
+        cout << "prev: " << prev << endl;
         cout << "next: "<< curr << endl;
         requests.pop_front();
         total_dist += abs(prev - curr);
+        cout << abs(prev - curr) <<endl;
         prev = curr;
     }
     
     cout << "total distance for SCAN: " << total_dist << endl;
 }
 
+// similar to SCAN
 void CSCAN()
 {
+    initialize_list();
     
+    int total_dist = 0;
+    int curr = start_position;
+    int prev = start_position;
+    
+    //sort by increasing order
+    requests.sort();
+    
+    while (1) {
+        curr = find_next_large(curr);
+        //no more next large element... go to the start of the track
+        if(curr == -1){
+            prev = track_start;
+            break;
+        }
+        cout << "prev: " << prev << endl;
+        cout << "next: "<< curr << endl;
+        requests.remove(curr);
+        total_dist += abs(prev - curr);
+        cout << abs(prev - curr) <<endl;
+        prev = curr;
+    }
+    
+    for(list<int>::iterator it = requests.begin(); it != requests.end(); ++it){
+        curr = *it;
+        cout << "prev: " << prev << endl;
+        cout << "next: "<< curr << endl;
+        requests.pop_front();
+        total_dist += abs(prev - curr);
+        cout << abs(prev - curr) <<endl;
+        prev = curr;
+    }
+    
+    cout << "total distance for CSCAN: " << total_dist << endl;
 }
 
 void LOOK()
